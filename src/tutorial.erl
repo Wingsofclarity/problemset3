@@ -68,7 +68,7 @@ fib(0) ->
 fib(1) -> 
     1;
 fib(N) when N > 0 -> 
-    tbi.
+    fib(N-1)+fib(N-2).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Tail Recursive functions %%%%%%%%%%
@@ -83,7 +83,7 @@ fac_tr(N) ->
 fac_tr(0, Acc) -> 
     Acc;
 fac_tr(N, Acc) ->
-    tbi.
+    fac_tr(N-1, Acc*N).
 
 %% @doc Calculates the Nth fibonacci number, implemented using tail
 %% recursion.
@@ -92,10 +92,10 @@ fac_tr(N, Acc) ->
 fib_tr(N) ->
     fib_tr(N, 0,1).
 
-fib_tr(0, Xi, Xii) -> 
-    tbi;
+fib_tr(0, Xi, Xii) ->
+    Xi;
 fib_tr(Iter, Xi, Xii) -> 
-    tbi.
+    fib_tr(Iter-1, Xi+Xii, Xi).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -118,7 +118,7 @@ fib_tr(Iter, Xi, Xii) ->
 
 right_triangles(N) ->
     L = lists:seq(1, N),
-    tbi.
+    [{X,X,X} || X<-L].
 
 %% @doc Returns a list of tuples, where each tuple describes a caracter in the Simposon family.
 %%
@@ -168,13 +168,17 @@ simpsons() ->
       Name::string().
 
 simpsons(names) ->
-    tbi;
+    L = simpsons(),
+    [X ||{_,_,X}<-L];
 simpsons(males) ->
-    tbi;
+    L = simpsons(),
+    [X ||{_,Y,X}<-L,Y==male];
 simpsons(females) ->
-    tbi;
+    L = simpsons(),
+    [X ||{_,Y,X}<-L,Y==female];
 simpsons(pets) ->
-    tbi.
+    L = simpsons(),
+    [X ||{Y,_,X}<-L,Y==pet].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Guarded Functions  %%%%%%%%%%
