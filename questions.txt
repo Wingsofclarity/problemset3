@@ -1,0 +1,103 @@
+Questions
+Operating systems and process oriented programming (1DT096) - spring 2016
+
+Problem set 3
+
+The actor model
+What is meant by the actor model for concurrency?
+How is the actor model different from processes and threads?
+Sequential Erlang
+Erlang is a concurrent programming language implementing the actor model. The sequential subset of Erlang is a functional language.
+
+How is the functional paradigm different from the imperative paradigm?
+Data types
+For each of the Erlang data types listed below, give examples on how to use values of that type:
+
+Atom
+Number
+Tuple
+List
+Fun
+Single assignment varaiables
+Erlang uses single assignment variables.
+
+What is meant by single assignment?
+Pattern matching
+Explain using examples how pattern matching occurs when evaluating:
+
+a function call
+a case expression
+a receive expression
+a match operator (=) expressions.
+Lists
+The list is one of the main main data structures used in Erlang.
+
+what is mean by the head of a list?
+what is mean by the tail of a list?
+Explain each of the following list operations using examples:
+
+adding an element to the head of a list?
+extracting the value of the first element (head) of a list?
+list comprehensions
+lists:map/2
+lists:foldl/3
+lists:seq/2
+lists:seq/3
+Recursive functions
+Functional programming languages usually do not offer looping constructs like for and while. Instead, functional programmers rely on recursion.
+
+What is meant by a recursive function?
+What is meant by a tail recursive function?
+Why is tail recursive functions important?
+Function declaration
+When declaring a function, explain the meaning of the following symbols:
+
+->  (right arrow)
+;    (semi colon)
+.    (period)
+,    (comma)
+Guards
+Explain using examples how guards can be used together with:
+
+function declarations
+if expressions
+case expressions
+Concurrent Erlang
+Erlang is designed for massive concurrency. 
+
+Single assignment variables
+Erlang uses single assignment variables.
+
+In the context of concurrent computing, what is the implication of single assignment?
+Erlang processes 
+Compared to operating system processes and threads, why is it possible to create and concurrently execute a very large number of Erlang processes?
+Explain the effects of calling spawn/3.
+Do Erlang processes share any memory?
+How can a process get to know its own process id (PID)?
+Message passing
+In Erlang, processes communicate using message passing. Explain the syntax for: 
+
+sedning a message from one process to another process.
+receiving a message from a process.
+In Erlang: 
+
+what can be sent in a message?
+how is pattern matching used when receiving messages?
+is sending a message blocking the sender?
+is receiving a message blocking the receiver?
+is message passing in Erlang synchronous or asynchronous?
+if a process sends a message to another process and wants that process to send some sort of result back, how can this be accomplished?
+Process state
+Remember that Erlang uses single assignment:
+
+how is it possible for a process to change state?
+Process supervision
+In Erlang, processes can be linked to each other.
+
+What is the effect of linking two processes?
+What is the purpose of trap exit?
+Sometimes a process needs to terminate another process:
+
+How can exit/2 be used to terminate a process?
+How do trap exit affect the behaviour of exit/2?
+ 
