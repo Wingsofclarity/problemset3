@@ -8,6 +8,7 @@ How is the actor model different from processes and threads?
 ----Sequential Erlang----
 
 How is the functional paradigm different from the imperative paradigm?
+Wiki: In computer science, functional programming is a programming paradigm—a style of building the structure and elements of computer programs—that treats computation as the evaluation of mathematical functions and avoids changing-state and mutable data. It is a declarative programming paradigm, which means programming is done with expressions[1] or declarations[2] instead of statements.
 
 
 -------Data types-----
@@ -119,13 +120,18 @@ case expressions
 Concurrent Erlang
 Erlang is designed for massive concurrency. 
 
-Single assignment variables
-Erlang uses single assignment variables.
+---Single assignment variables----
 
 In the context of concurrent computing, what is the implication of single assignment?
-Erlang processes 
+It prevents data races making concurrency easier.
+
+---Erlang processes---
 Compared to operating system processes and threads, why is it possible to create and concurrently execute a very large number of Erlang processes?
+They are created behind the scenes and are very lightweight.
+
 Explain the effects of calling spawn/3.
+Returns pid of a newely created proccess.
+
 Do Erlang processes share any memory?
 How can a process get to know its own process id (PID)?
 Message passing
