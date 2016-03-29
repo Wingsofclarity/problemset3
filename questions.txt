@@ -137,32 +137,65 @@ Processes communicate by sending and receiving messages. Messages are sent by us
 
 How can a process get to know its own process id (PID)?
 whereis(process name).
+getpid().
 
 
-Message passing
+---Message passing----
 In Erlang, processes communicate using message passing. Explain the syntax for: 
 
 sedning a message from one process to another process.
+<PID> ! <Message>
+
 receiving a message from a process.
+recieve
+	<Message> ->
+		  <Expression>,
+		  <Expression>;
+        <Message> ->
+		  <Expression>
+end.
+
+
 In Erlang: 
 
 what can be sent in a message?
+Any erlang terms. lists, tuples, integers, atoms, pids, and so on.
+
 how is pattern matching used when receiving messages?
+
+
 is sending a message blocking the sender?
+no?
+
 is receiving a message blocking the receiver?
+if there's no match, then yes.
+
 is message passing in Erlang synchronous or asynchronous?
+asynchronous.
+
 if a process sends a message to another process and wants that process to send some sort of result back, how can this be accomplished?
-Process state
+Link? 
+
+---Process state---
 Remember that Erlang uses single assignment:
 
 how is it possible for a process to change state?
-Process supervision
+
+
+---Process supervision---
 In Erlang, processes can be linked to each other.
 
 What is the effect of linking two processes?
+If A exits B recieves an exit signal. 
+
 What is the purpose of trap exit?
+Prevent a proccess recieving a abnormal exit signal to exit and handle it in some other way.
+
 Sometimes a process needs to terminate another process:
 
+
 How can exit/2 be used to terminate a process?
+exit(Pid, Reason).
+
 How do trap exit affect the behaviour of exit/2?
  
