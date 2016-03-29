@@ -127,13 +127,18 @@ It prevents data races making concurrency easier.
 
 ---Erlang processes---
 Compared to operating system processes and threads, why is it possible to create and concurrently execute a very large number of Erlang processes?
-They are created behind the scenes and are very lightweight.
+They are created behind the scenes and are lightweight (grow and shrink dynamically).
 
 Explain the effects of calling spawn/3.
-Returns pid of a newely created proccess.
+Returns pid of a newely created proccess for Module,Function specified with [Args].
 
 Do Erlang processes share any memory?
+Processes communicate by sending and receiving messages. Messages are sent by using the send operator ! and received by calling receive.
+
 How can a process get to know its own process id (PID)?
+whereis(process name).
+
+
 Message passing
 In Erlang, processes communicate using message passing. Explain the syntax for: 
 
