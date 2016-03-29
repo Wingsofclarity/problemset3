@@ -1,62 +1,116 @@
-Questions
-Operating systems and process oriented programming (1DT096) - spring 2016
 
-Problem set 3
+---The actor model---
 
-The actor model
 What is meant by the actor model for concurrency?
+
 How is the actor model different from processes and threads?
-Sequential Erlang
-Erlang is a concurrent programming language implementing the actor model. The sequential subset of Erlang is a functional language.
+
+----Sequential Erlang----
 
 How is the functional paradigm different from the imperative paradigm?
-Data types
+
+
+-------Data types-----
 For each of the Erlang data types listed below, give examples on how to use values of that type:
 
 Atom
+best paired with other data types.
+
 Number
 Tuple
 List
 Fun
-Single assignment varaiables
-Erlang uses single assignment variables.
+
+----Single assignment varaiables-----
 
 What is meant by single assignment?
-Pattern matching
+Data types cant be modified. You assign new ones instead.
+
+-----Pattern matching----
 Explain using examples how pattern matching occurs when evaluating:
 
 a function call
+Arguments fall through the different patterns. First one that matches is taken.
+
 a case expression
+
+
 a receive expression
+
 a match operator (=) expressions.
-Lists
+
+-----Lists-----
 The list is one of the main main data structures used in Erlang.
 
 what is mean by the head of a list?
+First element.
+
 what is mean by the tail of a list?
-Explain each of the following list operations using examples:
+Everything but the head.
+
+-Explain each of the following list operations using examples:
 
 adding an element to the head of a list?
+[X]++L.
+
 extracting the value of the first element (head) of a list?
+Pattern match H|_
+
+
 list comprehensions
+[N*2||N<-L,N rem 2==0]
+
 lists:map/2
+L = lists:seq(1,6).
+Fun = fun(K) -> K*2 end.
+lists:map(Fun,L).
+-result: [2,4,6,8,10,12]
+
+
 lists:foldl/3
+L = lists:seq(1,6).
+Fun = fun(A,B) -> A+B end.
+lists:map(Fun,0,L).
+-result: 10.
+
+
+
 lists:seq/2
+L = lists:seq(0,6).
+-result: [0,1,2,3,4,5,6].
+
 lists:seq/3
+L = lists:seq(0,6,2).
+-result: [0,2,4,6].
+
 Recursive functions
 Functional programming languages usually do not offer looping constructs like for and while. Instead, functional programmers rely on recursion.
 
 What is meant by a recursive function?
+A function that calls itself.
+
 What is meant by a tail recursive function?
+A recursive call in such a way the stackframe from last call is not needed.
+
 Why is tail recursive functions important?
-Function declaration
+Optimizes stack use.
+
+----Function declaration-----
 When declaring a function, explain the meaning of the following symbols:
 
 ->  (right arrow)
+End of function header, start of body.
+
 ;    (semi colon)
+end of current patternmatch also return.
+
 .    (period)
+end of function also return.
+
 ,    (comma)
-Guards
+end of expression but no return.
+
+----Guards-----
 Explain using examples how guards can be used together with:
 
 function declarations
