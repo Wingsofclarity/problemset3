@@ -1,6 +1,4 @@
-
 ---The actor model---
-
 What is meant by the actor model for concurrency?
 
 How is the actor model different from processes and threads?
@@ -117,6 +115,7 @@ Explain using examples how guards can be used together with:
 function declarations
 if expressions
 case expressions
+
 Concurrent Erlang
 Erlang is designed for massive concurrency. 
 
@@ -198,4 +197,5 @@ How can exit/2 be used to terminate a process?
 exit(Pid, Reason).
 
 How do trap exit affect the behaviour of exit/2?
+
  

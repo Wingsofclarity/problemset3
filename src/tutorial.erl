@@ -178,7 +178,7 @@ simpsons(females) ->
     [X ||{_,Y,X}<-L,Y==female];
 simpsons(pets) ->
     L = simpsons(),
-    [X ||{Y,_,X}<-L,Y==pet].
+    [X ||{Y,_,X}<-L,Y=/=person].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Guarded Functions  %%%%%%%%%%
@@ -194,8 +194,10 @@ simpsons(pets) ->
 %% </div>
 -spec char_to_upper(char()) -> char().
 
-char_to_upper(Char) when true->
-    tbi.
+char_to_upper(Char) when Char>= 97, Char=<122 ->
+    Char-32;
+char_to_upper(Char) ->
+    Char.
 
 %% @doc Convert a character to lower case.
 %% === Example ===
@@ -207,8 +209,10 @@ char_to_upper(Char) when true->
 %% </div>
 -spec char_to_lower(char()) -> char().
 
-char_to_lower(Char) when true ->
-    tbi.
+char_to_lower(Char) when Char>=65, Char=<90 ->
+    Char+32;
+char_to_lower(Char) ->
+    Char.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Map  %%%%%%%%%%
@@ -225,7 +229,7 @@ char_to_lower(Char) when true ->
 -spec str_to_upper(string()) -> string().
 
 str_to_upper(String) ->
-    tbi.
+    [char_to_upper(X) ||X<-String].
 
 
 %% @doc Convert a string to lower case. 
@@ -237,7 +241,7 @@ str_to_upper(String) ->
 -spec str_to_lower(string()) -> string().
 
 str_to_lower(String) ->
-    tbi.
+    [char_to_lower(X) ||X<-String].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Fold %%%%%%%%%%
@@ -254,7 +258,7 @@ str_to_lower(String) ->
       M::integer().
 
 max([H | T]) ->
-    F = tbi,
+    F = fun(A,B) when A > B -> A; (_,B) -> B end,
     lists:foldl(F, H, T).
 		       
 
