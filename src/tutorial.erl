@@ -273,10 +273,8 @@ max([H | T]) ->
       String::string(),
       Char::char().
       
-count(String, Char) ->
-
-    F = tbi,
-    
+count(String, Char) ->    
+    F = fun (A,C) when A==Char  -> C+1; (_,C)->C end,
     lists:foldl(F, 0, String).
 
 
@@ -300,6 +298,3 @@ odd_and_even(List) ->
 	end,
     
     lists:foldl(F, {{odd, []}, {even, []}}, List).
-    
-
-
