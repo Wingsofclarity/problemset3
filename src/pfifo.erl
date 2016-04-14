@@ -31,7 +31,12 @@ loop(Fifo) ->
 	    PID !  {push, fifo:push(Fifo, Value)},
 	    loop(Fifo);
 	{pop, PID} ->
-	    PID ! {pop, fifo:pop(Fifo)},
+	    try fifo:pop(Fifo) of
+	    	A->PID ! A
+	    catch
+	        %%Exception->PID ! {error, 'empty fifo'}
+	    end
+	        
 	    loop(Fifo)
     end.
 
