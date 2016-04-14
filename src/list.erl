@@ -83,7 +83,10 @@ worker(List, Collect, Death) ->
 collect(N, Maxes) when length(Maxes) < N ->
     receive 
 	{'EXIT', _PID, random_death} ->
-	    collect(N, [-666|Maxes]);
+	    L = lists:seq(1,10),
+	    Death = death:start(60),
+            spawn_link(fun() -> worker(L, self(), Death) end),
+	    collect(N, Maxes);
 	{'EXIT', _PID, normal} ->
 	    collect(N, Maxes);
 	Max -> 
