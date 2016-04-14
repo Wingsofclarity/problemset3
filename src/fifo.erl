@@ -72,6 +72,25 @@ empty({fifo, _, _}) ->
 %% called automatically by fifo:test()
 
 
+my_test()->
+    F = new(),
+    ?assertEqual({fifo, [], []}, F).
+
+my_push_test()->
+   F = new(),
+   push(F,3),
+   ?assertEqual({fifo,[3],[]},F),
+   push(F,2),
+   ?assertEqual({fifo,[3,2],[]},F).
+   
+empty_test() ->
+    F =  new(),
+    ?assertMatch(true, empty(F)),
+    push(F, foo),
+    ?assertMatch(false, empty(F)),
+    pop(F),
+    ?assertMatch(true, empty(F)).
+    
 new_test_() -> 
     [?_assertEqual({fifo, [], []}, new()), 
      ?_assertMatch(0, fifo:size(new())),
