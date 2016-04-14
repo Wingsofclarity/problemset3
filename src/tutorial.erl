@@ -1,19 +1,19 @@
 %% @author Karl Marklund <karl.marklund@it.uu.se>
 -module(tutorial).
 
--export([hello/0, hello/1, 
+-export([hello/0, hello/1,
 	 fac/1, fib/1,
 	 fac_tr/1, fib_tr/1,
 	 right_triangles/1,
-	 simpsons/0, simpsons/1, 
-	 char_to_upper/1, char_to_lower/1, 
-	 str_to_upper/1, str_to_lower/1, 
-	 max/1, count/2, 
+	 simpsons/0, simpsons/1,
+	 char_to_upper/1, char_to_lower/1,
+	 str_to_upper/1, str_to_lower/1,
+	 max/1, count/2,
 	 odd_and_even/1
 	]).
 
 
-%% @doc Prints "Hello!" to the terminal. 
+%% @doc Prints "Hello!" to the terminal.
 -spec hello() -> ok.
 
 hello() ->
@@ -28,14 +28,14 @@ hello() ->
 
 hello(0) ->
     ok;
-hello(N) -> 
+hello(N) ->
     io:format("~p Hello!~n", [N]),
     hello(N-1).
 
 %% @doc The factorial function.
 %% === Example ===
 %% <div class="example">```
-%% 25> [{N,tutorial:fac(N)} || N <- lists:seq(0,10)].                              
+%% 25> [{N,tutorial:fac(N)} || N <- lists:seq(0,10)].
 %% [{0,1},
 %%  {1,1},
 %%  {2,2},
@@ -55,7 +55,7 @@ fac(N) -> N*fac(N-1).
 
 
 
-%% @doc Calcultates the Nth Fibonnacci number. 
+%% @doc Calcultates the Nth Fibonnacci number.
 %% === Example ===
 %% <div class="example">```
 %% > [tutorial:fib(N) || N <- lists:seq(0,10)].
@@ -63,11 +63,11 @@ fac(N) -> N*fac(N-1).
 %% </div>
 -spec fib(N::integer()) -> integer().
 
-fib(0) -> 
+fib(0) ->
     0;
-fib(1) -> 
+fib(1) ->
     1;
-fib(N) when N > 0 -> 
+fib(N) when N > 0 ->
     fib(N-1)+fib(N-2).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -80,7 +80,7 @@ fib(N) when N > 0 ->
 fac_tr(N) ->
     fac_tr(N,1).
 
-fac_tr(0, Acc) -> 
+fac_tr(0, Acc) ->
     Acc;
 fac_tr(N, Acc) ->
     fac_tr(N-1, Acc*N).
@@ -94,7 +94,7 @@ fib_tr(N) ->
 
 fib_tr(0, Xi, Xii) ->
     Xi;
-fib_tr(Iter, Xi, Xii) -> 
+fib_tr(Iter, Xi, Xii) ->
     fib_tr(Iter-1, Xi+Xii, Xi).
 
 
@@ -118,7 +118,7 @@ fib_tr(Iter, Xi, Xii) ->
 
 right_triangles(N) ->
     L = lists:seq(1, N),
-    [{X,X,X} || X<-L].
+    [{A,B,C} || A<-L, B<-L, C<-L, C*C =:= A*A + B*B].
 
 %% @doc Returns a list of tuples, where each tuple describes a caracter in the Simposon family.
 %%
@@ -140,16 +140,16 @@ right_triangles(N) ->
 
 simpsons() ->
     [
-     {person, male, "Bart"}, 
+     {person, male, "Bart"},
      {cat, female, "Snowball II"},
-     {person, male, "Homer"}, 
+     {person, male, "Homer"},
      {person, female, "Lisa"},
      {dog, male, "Santa's Little Helper"},
      {person, female, "Marge"},
      {pig, male, "Spider Pig"}
     ].
 
-%% @doc Returns a filtered list of names of characters in the Simpson family. 
+%% @doc Returns a filtered list of names of characters in the Simpson family.
 %% === Example ===
 %% <div class="example">```
 %% > tutorial:simpsons(names).
@@ -157,9 +157,9 @@ simpsons() ->
 %%  "Santa's Little Helper","Marge","Spider Pig"]
 %% > tutorial:simpsons(females).
 %% ["Snowball II","Lisa","Marge"]
-%% > tutorial:simpsons(males).  
+%% > tutorial:simpsons(males).
 %% ["Bart","Homer","Santa's Little Helper","Spider Pig"]
-%% > tutorial:simpsons(pets). 
+%% > tutorial:simpsons(pets).
 %% ["Snowball II","Santa's Little Helper","Spider Pig"]'''
 %% </div>
 
@@ -187,9 +187,9 @@ simpsons(pets) ->
 %% @doc Convert a character to upper case.
 %% === Example ===
 %% <div class="example">```
-%% > tutorial:char_to_upper($a). 
+%% > tutorial:char_to_upper($a).
 %% 65
-%% > tutorial:char_to_upper($@). 
+%% > tutorial:char_to_upper($@).
 %% 64'''
 %% </div>
 -spec char_to_upper(char()) -> char().
@@ -204,7 +204,7 @@ char_to_upper(Char) ->
 %% <div class="example">```
 %% > tutorial:char_to_lower($A).
 %% 97
-%% > tutorial:char_to_lower($@).                                                 
+%% > tutorial:char_to_lower($@).
 %% 64'''
 %% </div>
 -spec char_to_lower(char()) -> char().
@@ -220,7 +220,7 @@ char_to_lower(Char) ->
 
 %% HINT: Use the char_to_upper() and char_to_lower().
 
-%% @doc Convert a string to upper case. 
+%% @doc Convert a string to upper case.
 %% === Example ===
 %% <div class="example">```
 %% > tutorial:str_to_upper("Erlang").
@@ -232,10 +232,10 @@ str_to_upper(String) ->
     [char_to_upper(X) ||X<-String].
 
 
-%% @doc Convert a string to lower case. 
+%% @doc Convert a string to lower case.
 %% === Example ===
 %% <div class="example">```
-%% 7> tutorial:str_to_lower("Upper + Lower").   
+%% 7> tutorial:str_to_lower("Upper + Lower").
 %% "upper + lower"'''
 %% </div>
 -spec str_to_lower(string()) -> string().
@@ -260,20 +260,20 @@ str_to_lower(String) ->
 max([H | T]) ->
     F = fun(A,B) when A > B -> A; (_,B) -> B end,
     lists:foldl(F, H, T).
-		       
+
 
 %% @doc Returns the number of times Char occurs in String.
 %% === Example ===
 %% <div class="example">```
-%% > tutorial:count("Operating systems and multicore programming", $m). 
+%% > tutorial:count("Operating systems and multicore programming", $m).
 %% 4'''
 %% </div>
 
 -spec count(String, Char) -> integer() when
       String::string(),
       Char::char().
-      
-count(String, Char) ->    
+
+count(String, Char) ->
     F = fun (A,C) when A==Char  -> C+1; (_,C)->C end,
     lists:foldl(F, 0, String).
 
@@ -296,5 +296,5 @@ odd_and_even(List) ->
 	   (X, {{odd, Odd}, {even, Even}})  ->
 		{{odd, [X | Odd]}, {even, Even}}
 	end,
-    
+
     lists:foldl(F, {{odd, []}, {even, []}}, List).
