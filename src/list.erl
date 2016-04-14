@@ -66,8 +66,9 @@ split(L, N, Lists) ->
 pmax(List, N, Death) when length(List) > N ->
     Lists = split(List, N),
     CollectPID = self(),
-    [spawn_link(fun() -> worker(L, CollectPID, Death) end) || L <- Lists],
-    Maxes = collect(length(Lists), []),
+    Overseer = map:new(),
+    [map:put(spawn_link(fun() -> worker(L, CollectPID, Death) end),L,Overseer) || L <- Lists],
+    Maxes = collect(length(Lists), [], Overseer),
     pmax(Maxes, N, Death);
 pmax(List, _, _) ->
     list:max(List). 
@@ -80,17 +81,18 @@ worker(List, Collect, Death) ->
 
 %% Wait for results from all workers. 
 
-collect(N, Maxes) when length(Maxes) < N ->
+collect(N, Maxes, Overseer) when length(Maxes) < N ->
     receive 
 	{'EXIT', _PID, random_death} ->
-	    L = lists:seq(1,10),
+            L = map:get(_PID,Overseer),
 	    Death = death:start(60),
-            spawn_link(fun() -> worker(L, self(), Death) end),
-	    collect(N, Maxes);
+	    Overseer2 = map:remove(_PID,Overseer),
+	    Overseer3 = map:put(spawn_link(fun() -> worker(L, self(), Death) end),L),
+	    collect(N, Maxes,Overseer3);
 	{'EXIT', _PID, normal} ->
-	    collect(N, Maxes);
+	    collect(N, Maxes, Overseer);
 	Max -> 
-	    collect(N, [Max|Maxes]) 
+	    collect(N, [Max|Maxes], Overseer) 
     end;
 
 collect(_N, Maxes) ->
