@@ -29,7 +29,7 @@ size({fifo, In, Out}) ->
 %% To make it fast to push new values, add a new value to the head of
 %% In.
 
-push({fifo, In, Out}, X) -> 
+push({fifo, In, Out}, X) ->
     {fifo, [X|In],Out}.
 
 %% @doc TODO Add a description
@@ -38,8 +38,8 @@ push({fifo, In, Out}, X) ->
 
 %% pop should return {Value, NewFifo}
 
-pop({fifo, [], []}) -> 
-    erlang:error('empty fifo');
+pop({fifo, [], []}) ->
+    {error, empty_fifo};
 
 %% To make pop fast we want to pop of the head of the Out list.
     

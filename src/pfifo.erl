@@ -25,7 +25,13 @@ loop(Fifo) ->
 	    PID ! {size, fifo:size(Fifo)},
 	    loop(Fifo); 
 	{empty, PID} ->
-	    PID ! fifo:empty(Fifo),
+	    PID ! {empty, fifo:empty(Fifo)},
+	    loop(Fifo);
+	{push, PID, Value} ->
+	    PID !  {push, fifo:push(Fifo, Value)},
+	    loop(Fifo);
+	{pop, PID} ->
+	    PID ! {pop, fifo:pop(Fifo)},
 	    loop(Fifo)
     end.
 
@@ -33,6 +39,7 @@ loop(Fifo) ->
 %%  By hiding the message passing protocol inside a functional
 %%  interface the user of the FIFO doesn't need to know whether or not
 %%  the FIFO is implemented as a separate process.
+
 
 %% @doc Returns the number of elements in Fifo. 
 -spec size(Fifo) -> integer() when Fifo::pfifo().
@@ -50,9 +57,11 @@ size(Fifo) ->
 empty(Fifo) ->
     Fifo ! {empty, self()},
     receive 
-	true ->
+	{empty, true} ->
+	    io:format("Trace!"),
 	    true;
-	false  ->
+	{empty, false}  ->
+	    io:format("Trace!"),
 	    false
     end.
 
@@ -60,7 +69,13 @@ empty(Fifo) ->
 -spec pop(Fifo) -> term() when Fifo::pfifo().
 
 pop(Fifo) ->
-    tbi.
+    Fifo ! {pop, self()},
+    receive
+       {pop, {error, A}}->
+          {error,A};
+       {pop, A} ->
+          A
+    end.
 
 
 %% @doc Push a new value to Fifo. 
@@ -68,7 +83,11 @@ pop(Fifo) ->
       Fifo::pfifo(),
       Value::term().
 push(Fifo, Value) ->
-    ok.
+    Fifo ! {push,self(), Value},
+    receive
+	{push, A}->
+	       A
+    end.
     
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -85,6 +104,10 @@ start_test_() ->
      ?_assertMatch(0, pfifo:size(new())),
      ?_assertMatch(true, empty(new())),
      ?_assertMatch({error, empty_fifo}, pop(new()))].
+
+my_empty_test() ->
+    F =  new(),
+    ?assertMatch(true, empty(F)).
 
 empty_test() ->
     F =  new(),
@@ -110,12 +133,3 @@ large_push_pop_test() ->
     List = lists:seq(1, 999),
     [push(F, Value) || Value <- List],
     ?assertEqual([pop(F) || _ <- List], List).
-   
-		 
-    
-    
-    
-    
-    
-    
-    

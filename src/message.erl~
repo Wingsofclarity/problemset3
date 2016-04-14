@@ -1,0 +1,12 @@
+-module(message)
+-export().
+
+pong()->
+   receive
+	banan->
+	   bananaisgood;
+	potatoes->
+  	   dontlike;
+	A->
+	   A+1,
+   end.
