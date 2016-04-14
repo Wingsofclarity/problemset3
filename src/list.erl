@@ -5,6 +5,7 @@
 -include_lib("eunit/include/eunit.hrl").
 
 
+
 %% @doc Find the max value in a list using a sequential, recursive
 %% solution.
 -spec max(List) -> integer() when List::list().
@@ -66,8 +67,8 @@ split(L, N, Lists) ->
 pmax(List, N, Death) when length(List) > N ->
     Lists = split(List, N),
     CollectPID = self(),
-    Overseer = map:new(),
-    [map:put(spawn_link(fun() -> worker(L, CollectPID, Death) end),L,Overseer) || L <- Lists],
+    Map = [{spawn_link(fun() -> worker(L, CollectPID, Death) end),L} || L <- Lists],
+    Overseer=maps:from_list(Map),
     Maxes = collect(length(Lists), [], Overseer),
     pmax(Maxes, N, Death);
 pmax(List, _, _) ->
@@ -84,10 +85,10 @@ worker(List, Collect, Death) ->
 collect(N, Maxes, Overseer) when length(Maxes) < N ->
     receive 
 	{'EXIT', _PID, random_death} ->
-            L = map:get(_PID,Overseer),
+            L = maps:get(_PID,Overseer),
 	    Death = death:start(60),
-	    Overseer2 = map:remove(_PID,Overseer),
-	    Overseer3 = map:put(spawn_link(fun() -> worker(L, self(), Death) end),L),
+	    Overseer2 = maps:remove(_PID,Overseer),
+	    Overseer3 = maps:put(spawn_link(fun() -> worker(L, self(), Death) end),L,Overseer2),
 	    collect(N, Maxes,Overseer3);
 	{'EXIT', _PID, normal} ->
 	    collect(N, Maxes, Overseer);
@@ -95,7 +96,7 @@ collect(N, Maxes, Overseer) when length(Maxes) < N ->
 	    collect(N, [Max|Maxes], Overseer) 
     end;
 
-collect(_N, Maxes) ->
+collect(_N, Maxes, _) ->
     io:format("Collected Maxes = ~w~n", [Maxes]),
     Maxes.
 
@@ -106,7 +107,10 @@ collect(_N, Maxes) ->
 %% All functions with names ending wiht _test() or _test_() will be
 %% called automatically by list:test()
 
-
+my_test()->
+    List = lists:seq(1,10),
+    A = pmax(List,2),
+    ?assertMatch(A,10).
 
 split_test_() ->
     List = lists:seq(1,10), 
