@@ -39,7 +39,8 @@ push({fifo, In, Out}, X) ->
 %% pop should return {Value, NewFifo}
 
 pop({fifo, [], []}) ->
-    {error, empty_fifo};
+    erlang:error('empty fifo');
+%%    {error, empty_fifo};
 
 %% To make pop fast we want to pop of the head of the Out list.
     
