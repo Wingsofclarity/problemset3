@@ -12,7 +12,8 @@ APPNAME=Problem set 3 - OSM (1DT089) 2013
 
 all: $(OBJECTS)
 
-ebin/%.beam: src/%.erl 
+ebin/%.beam: src/%.erl
+	@mkdir -p $(@D)
 	erlc $(ERLC_FLAGS) -o ebin/ $<
 
 clean:
@@ -20,11 +21,11 @@ clean:
 	rm -Rf src/*.beam
 	rm -Rf doc/*.html
 
-doc: 
+doc:
 	erl -noshell -run edoc_run application "'$(APPNAME)'"  '"."' '[{def,{vsn,"$(VSN)"}}, {stylesheet, "my_style.css"}]'
 
 doc_url:
-	@echo 
+	@echo
 	@echo "EDoc index page available at file://$(PWD)/doc/index.html"
 	@echo
 
@@ -50,7 +51,3 @@ test_%: ebin/%.beam
 
 testv_%: ebin/%.beam
 	erl -noshell -pa ebin -eval "eunit:test($(subst testv_,, $@), [verbose])" -s init stop
-
-
-
-
