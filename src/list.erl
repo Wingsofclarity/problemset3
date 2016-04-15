@@ -1,5 +1,5 @@
 -module(list).
--export([max/1, split/2, pmax/2]).
+-export([max/1, split/2, pmax/2, my_split/2]).
 
 %% To use EUnit we must include this:
 -include_lib("eunit/include/eunit.hrl").
@@ -56,7 +56,7 @@ split(L, N) ->
 
 %% An auxiliary recursive split function
 split(L, N, Lists) ->
-    {L1, L2} = lists:split(N, L),
+    {L1, L2} = lists:split(N,L),
     if length(L2) > N ->
 	    split(L2, N, [L1|Lists]);
        true ->
@@ -86,13 +86,15 @@ collect(N, Maxes, Overseer) when length(Maxes) < N ->
     receive 
 	{'EXIT', _PID, random_death} ->
             L = maps:get(_PID,Overseer),
-	    Death = death:start(60),
+	    Death = death:start(0),
 	    Overseer2 = maps:remove(_PID,Overseer),
-	    Overseer3 = maps:put(spawn_link(fun() -> worker(L, self(), Death) end),L,Overseer2),
+	    PID=self(),
+	    Overseer3 = maps:put(spawn_link(fun() -> worker(L, PID, Death) end),L,Overseer2),    
 	    collect(N, Maxes,Overseer3);
 	{'EXIT', _PID, normal} ->
 	    collect(N, Maxes, Overseer);
-	Max -> 
+	Max ->
+	    io:format("Number collected: ~w~n",[Max]),
 	    collect(N, [Max|Maxes], Overseer) 
     end;
 
@@ -100,17 +102,19 @@ collect(_N, Maxes, _) ->
     io:format("Collected Maxes = ~w~n", [Maxes]),
     Maxes.
 
+my_split(N,L) when N>length(L)->
+    L;
+my_split(N,L)->
+    {L1, L2} = lists:split(N,L),
+    [L1|my_split(N,L2)].
+    
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%			   EUnit Test Cases                                  %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% All functions with names ending wiht _test() or _test_() will be
 %% called automatically by list:test()
-
-my_test()->
-    List = lists:seq(1,10),
-    A = pmax(List,2),
-    ?assertMatch(A,10).
 
 split_test_() ->
     List = lists:seq(1,10), 
