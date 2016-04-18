@@ -9,7 +9,7 @@
       Base::integer().
 
 start(A,B, Base) ->
-    tbi.
+    start(A,B,Base,[normal]).
 
 %% @doc TODO: add documentation
 -spec start(A,B,Base, Options) -> ok when 
@@ -19,5 +19,7 @@ start(A,B, Base) ->
       Option::atom() | tuple(),
       Options::[Option].
 
+start(A,B,Base, [normal]) ->
+    tbi;
 start(A,B,Base, Options) ->
     tbi.
