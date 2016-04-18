@@ -127,6 +127,36 @@ split(L, N) ->
     {L1, L2} = lists:split(SplitLen, L),
     [L1 | split(L2, N-1)].
 
+toInt(A) when A>=48, A=<57 ->
+    A-48;
+toInt(A) when A>=97, A=<122 ->
+    A-97+10;
+toInt(A) when A>=65, A=<90 ->
+    A-65+10.
+
+toChar(A) when A>=0, A=<9 ->
+    A;
+toChar(A) when A>=10->
+    A+97-10.    
+
+sum(Xs,Ys,_,_) when length(Xs)=/=length(Ys)->
+    error;
+sum([],[],_,_)->
+    [];
+sum([X],[Y],CarryIn,Base) ->
+    [toChar(toInt($X)+toInt($Y))];
+sum([X|Xs],[Y|Ys],CarryIn,Base) ->
+    toInt(X)+toInt(Y).
+
+
+
+
+padNumber()->
+    tbi.
+
+padNumbers()->
+    tbi.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                                                          %%
 %%			   EUnit Test Cases                                 %%
@@ -242,3 +272,17 @@ split_stat_test_() ->
     %% depends on the length of L.
 
     [Assert(L,N) ||  L <- seqs(33), N <- lists:seq(1,length(L)+5)].
+
+toInt_test() ->
+    Zero = 97,
+    [?_assertMatch(0,toInt(Zero))].
+
+sum_test() ->
+    [?_assertEqual({['0'], 0 } ,sum(['0'],['0'],0,10)),
+     ?_assertEqual({['0'], 0 } ,sum(['0'],['0'],0,35)),
+     ?_assertEqual({['1'], 0 } ,sum(['0'],['1'],0,10)),
+     ?_assertEqual({['3'], 0 } ,sum(['2'],['1'],0,10)),
+     ?_assertEqual({['1','4','9'], 0 } ,sum(['0','2','1'],['1','2','8'],0,10))].
+
+
+
