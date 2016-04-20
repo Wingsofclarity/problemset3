@@ -5,7 +5,7 @@
 
 -module(utils).
 
--export([seqs/1, filter/2, split/2]).
+-export([seqs/1, filter/2, split/2, padNumbers/2]).
 
 %% To use EUnit we must include this.
 -include_lib("eunit/include/eunit.hrl").
@@ -157,13 +157,16 @@ sum_aux(X,Y,CarryIn,Base)when X+Y+CarryIn<Base ->
     {X+Y+CarryIn, 0}.
 
 
-padNumber(Xs,0)->
+padNumber(Xs,Count)when length(Xs)==Count->
     Xs;
 padNumber(Xs,Count)->
-    padNumber([$0|Xs],Count-1).
+    padNumber([$0|Xs],Count).
 
-padNumbers(Xs, Ys)->
-    K = math:max(length(Xs),length(Ys)),
+padNumbers(Xs, Ys) when length(Xs)>=length(Ys) ->
+    K = length(Xs),
+    {padNumber(Xs,K),padNumber(Ys,K)};
+padNumbers(Xs, Ys) when length(Xs)<length(Ys) ->
+    K = length(Ys),
     {padNumber(Xs,K),padNumber(Ys,K)}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
