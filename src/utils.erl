@@ -157,12 +157,14 @@ sum_aux(X,Y,CarryIn,Base)when X+Y+CarryIn<Base ->
     {X+Y+CarryIn, 0}.
 
 
+padNumber(Xs,0)->
+    Xs;
+padNumber(Xs,Count)->
+    padNumber([$0|Xs],Count-1).
 
-padNumber()->
-    tbi.
-
-padNumbers()->
-    tbi.
+padNumbers(Xs, Ys)->
+    K = math:max(length(Xs),length(Ys)),
+    {padNumber(Xs,K),padNumber(Ys,K)}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                                                          %%
@@ -295,6 +297,10 @@ sum_test() ->
      ?_assertEqual({[$0,$1], 1 } ,sum([$1,$1],[$1,$0],0,2)),
      ?_assertEqual({[$a,$2,$4], 0 } ,sum([$k,$2,$3],[$k,$c,$8],0,17))].
 
-
+padNumbers_test()->
+    Xs= [$1,$0,$2],
+    Ys = [$1,$1,$1,$1],
+    [?_assertMatch({[$0|Xs],Ys}, padNumbers(Xs,Ys)),
+     ?_assertMatch({Ys,[$0|Xs]}, padNumbers(Ys,Xs))].
 
 
