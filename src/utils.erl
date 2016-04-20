@@ -127,27 +127,34 @@ split(L, N) ->
     {L1, L2} = lists:split(SplitLen, L),
     [L1 | split(L2, N-1)].
 
-toInt(A) when A>=48, A=<57 ->
-    A-48;
-toInt(A) when A>=97, A=<122 ->
-    A-97+10;
-toInt(A) when A>=65, A=<90 ->
-    A-65+10.
+toInt(A) when A>=$0, A=<$9 ->
+    A-$0;
+toInt(A) when A>=$a, A=<$z ->
+    A-$a+10;
+toInt(A) when A>=$A, A=<$Z ->
+    A-$A+10.
 
 toChar(A) when A>=0, A=<9 ->
-    A;
+    A+$0;
 toChar(A) when A>=10->
-    A+97-10.    
+    A+$a-10.    
+
 
 sum(Xs,Ys,_,_) when length(Xs)=/=length(Ys)->
     error;
-sum([],[],_,_)->
-    [];
-sum([X],[Y],CarryIn,Base) ->
-    [toChar(toInt($X)+toInt($Y))];
-sum([X|Xs],[Y|Ys],CarryIn,Base) ->
-    toInt(X)+toInt(Y).
+sum(Xs,Ys,CarryIn,Base)->
+    sum(lists:reverse(Xs),lists:reverse(Ys),CarryIn,Base,[]).
 
+sum([],[],CarryIn,_,Sum)->
+    {Sum,CarryIn};
+sum([X|Xs],[Y|Ys],CarryIn,Base,Sum)->
+    {Single, CarryOut} = sum_aux(toInt(X),toInt(Y),CarryIn,Base),
+    sum(Xs,Ys,CarryOut,Base,[toChar(Single)|Sum]).
+
+sum_aux(X,Y,CarryIn,Base)when X+Y+CarryIn>=Base ->
+    {X+Y+CarryIn-Base, 1};
+sum_aux(X,Y,CarryIn,Base)when X+Y+CarryIn<Base ->
+    {X+Y+CarryIn, 0}.
 
 
 
@@ -274,15 +281,20 @@ split_stat_test_() ->
     [Assert(L,N) ||  L <- seqs(33), N <- lists:seq(1,length(L)+5)].
 
 toInt_test() ->
-    Zero = 97,
-    [?_assertMatch(0,toInt(Zero))].
+    [?_assertMatch(0,toInt($0)),
+     ?_assertMatch(10,toInt($a))].
 
 sum_test() ->
-    [?_assertEqual({['0'], 0 } ,sum(['0'],['0'],0,10)),
-     ?_assertEqual({['0'], 0 } ,sum(['0'],['0'],0,35)),
-     ?_assertEqual({['1'], 0 } ,sum(['0'],['1'],0,10)),
-     ?_assertEqual({['3'], 0 } ,sum(['2'],['1'],0,10)),
-     ?_assertEqual({['1','4','9'], 0 } ,sum(['0','2','1'],['1','2','8'],0,10))].
+    [?_assertEqual({[$0], 0 } ,sum([$0],[$0],0,10)),
+     ?_assertEqual({[$0], 0 } ,sum([$0],[$0],0,35)),
+     ?_assertEqual({[$1], 0 } ,sum([$0],[$1],0,10)),
+     ?_assertEqual({[$3], 0 } ,sum([$2],[$1],0,10)),
+     ?_assertEqual({[$1,$4,$9], 0 } ,sum([$0,$2,$1],[$1,$2,$8],0,10)),
+     ?_assertEqual({[$3], 0 } ,sum([$2],[$1],0,14)),
+     ?_assertEqual({[$0], 1 } ,sum([$1],[$1],0,2)),
+     ?_assertEqual({[$0,$1], 1 } ,sum([$1,$1],[$1,$0],0,2)),
+     ?_assertEqual({[$a,$2,$4], 0 } ,sum([$k,$2,$3],[$k,$c,$8],0,17))].
+
 
 
 
