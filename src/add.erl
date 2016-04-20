@@ -25,8 +25,9 @@ start(A, B, Base, Options) ->
         integer_to_list(B)
     ),
 
-    As = utils:split(APadded, 3),
-    Bs = utils:split(BPadded, 3),
+    N = proplists:get_value('N', Options, 3),
+    As = utils:split(APadded, N),
+    Bs = utils:split(BPadded, N),
 
     StartChild = create_children(
         As, Bs, Base, self()
