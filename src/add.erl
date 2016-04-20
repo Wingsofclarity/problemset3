@@ -20,8 +20,13 @@ start(A,B, Base) ->
       Options::[Option].
 
 start(A, B, Base, Options) ->
-    As = utils:split(integer_to_list(A), 3), % TODO padding
-    Bs = utils:split(integer_to_list(B), 3), % TODO padding
+    {APadded, BPadded} = utils:padNumbers(
+        integer_to_list(A),
+        integer_to_list(B)
+    ),
+
+    As = utils:split(APadded, 3),
+    Bs = utils:split(BPadded, 3),
 
     StartChild = create_children(
         As, Bs, Base, self()
@@ -46,12 +51,7 @@ start_child(A, B, NextPid, ParentPid, Base) ->
             {carry, CarryIn} ->
                 % io:format("~w; A: ~s; B: ~s; Carry in: ~w~n", [self(), A, B, CarryIn]),
 
-                % TODO: Replace with actual calculation
-                random:seed(now()),
-                {Result, CarryOut} = {
-                    integer_to_list(random:uniform(Base*Base*Base - 1 - Base*Base) + Base*Base),
-                    random:uniform(1)
-                },
+                {Result, CarryOut} = utils:sum(A, B, CarryIn, Base),
 
                 % io:format("~w; RESULT: ~s; CARRY OUT: ~w~n", [self(), Result, CarryOut]),
                 ParentPid ! {result, Result},
