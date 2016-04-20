@@ -5,7 +5,7 @@
 
 -module(utils).
 
--export([seqs/1, filter/2, split/2]).
+-export([seqs/1, filter/2, split/2, padNumbers/2]).
 
 %% To use EUnit we must include this.
 -include_lib("eunit/include/eunit.hrl").
@@ -127,6 +127,48 @@ split(L, N) ->
     {L1, L2} = lists:split(SplitLen, L),
     [L1 | split(L2, N-1)].
 
+toInt(A) when A>=$0, A=<$9 ->
+    A-$0;
+toInt(A) when A>=$a, A=<$z ->
+    A-$a+10;
+toInt(A) when A>=$A, A=<$Z ->
+    A-$A+10.
+
+toChar(A) when A>=0, A=<9 ->
+    A+$0;
+toChar(A) when A>=10->
+    A+$a-10.    
+
+
+sum(Xs,Ys,_,_) when length(Xs)=/=length(Ys)->
+    error;
+sum(Xs,Ys,CarryIn,Base)->
+    sum(lists:reverse(Xs),lists:reverse(Ys),CarryIn,Base,[]).
+
+sum([],[],CarryIn,_,Sum)->
+    {Sum,CarryIn};
+sum([X|Xs],[Y|Ys],CarryIn,Base,Sum)->
+    {Single, CarryOut} = sum_aux(toInt(X),toInt(Y),CarryIn,Base),
+    sum(Xs,Ys,CarryOut,Base,[toChar(Single)|Sum]).
+
+sum_aux(X,Y,CarryIn,Base)when X+Y+CarryIn>=Base ->
+    {X+Y+CarryIn-Base, 1};
+sum_aux(X,Y,CarryIn,Base)when X+Y+CarryIn<Base ->
+    {X+Y+CarryIn, 0}.
+
+
+padNumber(Xs,Count)when length(Xs)==Count->
+    Xs;
+padNumber(Xs,Count)->
+    padNumber([$0|Xs],Count).
+
+padNumbers(Xs, Ys) when length(Xs)>=length(Ys) ->
+    K = length(Xs),
+    {padNumber(Xs,K),padNumber(Ys,K)};
+padNumbers(Xs, Ys) when length(Xs)<length(Ys) ->
+    K = length(Ys),
+    {padNumber(Xs,K),padNumber(Ys,K)}.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                                                          %%
 %%			   EUnit Test Cases                                 %%
@@ -242,3 +284,26 @@ split_stat_test_() ->
     %% depends on the length of L.
 
     [Assert(L,N) ||  L <- seqs(33), N <- lists:seq(1,length(L)+5)].
+
+toInt_test() ->
+    [?_assertMatch(0,toInt($0)),
+     ?_assertMatch(10,toInt($a))].
+
+sum_test() ->
+    [?_assertEqual({[$0], 0 } ,sum([$0],[$0],0,10)),
+     ?_assertEqual({[$0], 0 } ,sum([$0],[$0],0,35)),
+     ?_assertEqual({[$1], 0 } ,sum([$0],[$1],0,10)),
+     ?_assertEqual({[$3], 0 } ,sum([$2],[$1],0,10)),
+     ?_assertEqual({[$1,$4,$9], 0 } ,sum([$0,$2,$1],[$1,$2,$8],0,10)),
+     ?_assertEqual({[$3], 0 } ,sum([$2],[$1],0,14)),
+     ?_assertEqual({[$0], 1 } ,sum([$1],[$1],0,2)),
+     ?_assertEqual({[$0,$1], 1 } ,sum([$1,$1],[$1,$0],0,2)),
+     ?_assertEqual({[$a,$2,$4], 0 } ,sum([$k,$2,$3],[$k,$c,$8],0,17))].
+
+padNumbers_test()->
+    Xs= [$1,$0,$2],
+    Ys = [$1,$1,$1,$1],
+    [?_assertMatch({[$0|Xs],Ys}, padNumbers(Xs,Ys)),
+     ?_assertMatch({Ys,[$0|Xs]}, padNumbers(Ys,Xs))].
+
+
