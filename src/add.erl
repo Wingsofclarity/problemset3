@@ -26,10 +26,11 @@ start(A, B, Base, Options) ->
     StartChild = create_children(
         As, Bs, Base, self()
     ),
-    StartChild ! {carry, "0"},
+    StartChild ! {carry, 0},
     {Result, CarryOut} = receive_results([]),
-    io:format("RESULT: ~w~n", [{Result, CarryOut}]),
-    lists:append([CarryOut | Result]).
+    SumStr = lists:append([integer_to_list(CarryOut) | Result]),
+    {Sum, _} = string:to_integer(SumStr),
+    Sum.
 
 %% @doc TODO: add documentation
 -spec start_child(A,B,NextPid,ParentPid,Base) -> pid() when
@@ -43,16 +44,16 @@ start_child(A, B, NextPid, ParentPid, Base) ->
     spawn(fun() ->
         receive
             {carry, CarryIn} ->
-                % io:format("~w; A: ~s; B: ~s; Carry in: ~s~n", [self(), A, B, CarryIn]),
+                % io:format("~w; A: ~s; B: ~s; Carry in: ~w~n", [self(), A, B, CarryIn]),
 
                 % TODO: Replace with actual calculation
                 random:seed(now()),
                 {Result, CarryOut} = {
                     integer_to_list(random:uniform(Base*Base*Base - 1 - Base*Base) + Base*Base),
-                    integer_to_list(random:uniform(1))
+                    random:uniform(1)
                 },
 
-                % io:format("~w; RESULT: ~s~n", [self(), Result]),
+                % io:format("~w; RESULT: ~s; CARRY OUT: ~w~n", [self(), Result, CarryOut]),
                 ParentPid ! {result, Result},
                 NextPid ! {carry, CarryOut}
         end
