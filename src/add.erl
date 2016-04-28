@@ -28,7 +28,7 @@ start(A,B, Base) ->
 
 %% @doc Adds two numbers A and B, specified as strings, in the given Base,
 %% by spawning child processes to do the job. It accepts one option:
-%%   `{'N', N}', where N is the amount of child processes to spawn to go the job.
+%%   ``{'N', N}'', where N is the amount of child processes to spawn to go the job.
 %%
 %% === Example ===
 %% <div class="example">
