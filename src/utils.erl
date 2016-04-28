@@ -127,6 +127,17 @@ split(L, N) ->
     {L1, L2} = lists:split(SplitLen, L),
     [L1 | split(L2, N-1)].
 
+%% @doc Converts an ASCII-value to an int of its value.
+%%
+%%
+%% === Example ===
+%%
+%% <div class="example">```
+%%1> toInt($2).
+%%   2
+%%2> toInt($a).
+%%   10
+%% </div>
 toInt(A) when A>=$0, A=<$9 ->
     A-$0;
 toInt(A) when A>=$a, A=<$z ->
@@ -134,12 +145,38 @@ toInt(A) when A>=$a, A=<$z ->
 toInt(A) when A>=$A, A=<$Z ->
     A-$A+10.
 
+%% @doc Converts an int to its ASCII value. For A>=10 it returns 
+%%      ASCII for anon-capital alphabetic characters.
+%%
+%%
+%% === Example ===
+%%
+%% <div class="example">```
+%%1> toInt($2).
+%%   2
+%%2> toInt($a).
+%%   10
+%% </div>
 toChar(A) when A>=0, A=<9 ->
     A+$0;
 toChar(A) when A>=10->
     A+$a-10.    
 
-
+%% @doc Adds zeros (char) to the start of the list until it is of length Count
+%%
+%% length(Xs)>=Count
+%%
+%%
+%% === Example ===
+%%
+%% <div class="example">```
+%%1>Xs= [$1,$0,$2].
+%%2>padNumber(Xs,5).
+%%  "00102"
+%%1>Ys= [$3,$2,$8].
+%%4>padNumber(Xs,3).
+%%  "328"
+%% </div>
 sum(Xs,Ys,_,_) when length(Xs)=/=length(Ys)->
     error;
 sum(Xs,Ys,CarryIn,Base)->
@@ -152,16 +189,52 @@ sum([X|Xs],[Y|Ys],CarryIn,Base,Sum)->
     sum(Xs,Ys,CarryOut,Base,[toChar(Single)|Sum]).
 
 sum_aux(X,Y,CarryIn,Base)when X+Y+CarryIn>=Base ->
+    random_sleep(),
     {X+Y+CarryIn-Base, 1};
 sum_aux(X,Y,CarryIn,Base)when X+Y+CarryIn<Base ->
+    random_sleep(),
     {X+Y+CarryIn, 0}.
 
+random_sleep()->
+    A = random:uniform()*1000,
+%%    io:format("I randomed ~w~n", [A]),
+    timer:sleep(round(A)).
+    
 
+%% @doc Adds zeros (char) to the start of the list until it is of length Count
+%%
+%% length(Xs)>=Count
+%%
+%%
+%% === Example ===
+%%
+%% <div class="example">```
+%%1>Xs= [$1,$0,$2].
+%%2>padNumber(Xs,5).
+%%  "00102"
+%%1>Ys= [$3,$2,$8].
+%%4>padNumber(Xs,3).
+%%  "328"
+%% </div>
 padNumber(Xs,Count)when length(Xs)==Count->
     Xs;
 padNumber(Xs,Count)->
     padNumber([$0|Xs],Count).
 
+
+%% @doc Adds zeros (char) to the start of the list that is
+%% the shortest until ithey are of equal length
+%%
+%%
+%%
+%% === Example ===
+%%
+%% <div class="example">```
+%%1>Xs= [$1,$0,$2],
+%%  Ys = [$1,$1,$1,$1].
+%%2>padNumbers(Xs,Ys).
+%%  {"0102","1111"}
+%% </div>
 padNumbers(Xs, Ys) when length(Xs)>=length(Ys) ->
     K = length(Xs),
     {padNumber(Xs,K),padNumber(Ys,K)};
@@ -285,11 +358,11 @@ split_stat_test_() ->
 
     [Assert(L,N) ||  L <- seqs(33), N <- lists:seq(1,length(L)+5)].
 
-toInt_test() ->
+toInt_test_() ->
     [?_assertMatch(0,toInt($0)),
      ?_assertMatch(10,toInt($a))].
 
-sum_test() ->
+sum_test_() ->
     [?_assertEqual({[$0], 0 } ,sum([$0],[$0],0,10)),
      ?_assertEqual({[$0], 0 } ,sum([$0],[$0],0,35)),
      ?_assertEqual({[$1], 0 } ,sum([$0],[$1],0,10)),
@@ -298,7 +371,7 @@ sum_test() ->
      ?_assertEqual({[$3], 0 } ,sum([$2],[$1],0,14)),
      ?_assertEqual({[$0], 1 } ,sum([$1],[$1],0,2)),
      ?_assertEqual({[$0,$1], 1 } ,sum([$1,$1],[$1,$0],0,2)),
-     ?_assertEqual({[$a,$2,$4], 0 } ,sum([$k,$2,$3],[$k,$c,$8],0,17))].
+     ?_assertEqual({[$d,$9,$a], 1 } ,sum([$e,$e,$e],[$e,$a,$c],0,16))].
 
 padNumbers_test()->
     Xs= [$1,$0,$2],
