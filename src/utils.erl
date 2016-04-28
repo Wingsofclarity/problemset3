@@ -5,7 +5,7 @@
 
 -module(utils).
 
--export([seqs/1, filter/2, split/2, padNumbers/2]).
+-export([seqs/1, filter/2, split/2, padNumbers/2, sum/4]).
 
 %% To use EUnit we must include this.
 -include_lib("eunit/include/eunit.hrl").
@@ -136,7 +136,7 @@ split(L, N) ->
 %%1> toInt($2).
 %%   2
 %%2> toInt($a).
-%%   10
+%%   10'''
 %% </div>
 toInt(A) when A>=$0, A=<$9 ->
     A-$0;
@@ -155,28 +155,46 @@ toInt(A) when A>=$A, A=<$Z ->
 %%1> toInt($2).
 %%   2
 %%2> toInt($a).
-%%   10
+%%   10'''
 %% </div>
 toChar(A) when A>=0, A=<9 ->
     A+$0;
 toChar(A) when A>=10->
     A+$a-10.    
 
-%% @doc Adds zeros (char) to the start of the list until it is of length Count
+%% @doc Adds Xs and Ys in arbitrary base.
+%% 
+%% Sum will return in as many numbers as the 
+%% largest list of Xs and Ys. If the sum should
+%% become one more digit than that Sum will not 
+%% display the last digit and CarryOut will be 1.
 %%
-%% length(Xs)>=Count
-%%
+%% In output of a base>10 digist worth more than 9
+%% will be repsented by the alphabet in chronological
+%% order in lower case.
 %%
 %% === Example ===
 %%
 %% <div class="example">```
-%%1>Xs= [$1,$0,$2].
-%%2>padNumber(Xs,5).
-%%  "00102"
-%%1>Ys= [$3,$2,$8].
-%%4>padNumber(Xs,3).
-%%  "328"
+%%1>sum("1","2",0,10).
+%%  {"3",0}
+%%2>sum("19","1",0,10).
+%%  {"00",1}
+%%3>sum("10","1",0,2).
+%%  {"11",0}
+%%4>sum("a","a",0,16).
+%%  {"4",1}
+%%'''
 %% </div>
+-spec sum(Xs, Ys, CarryIn, Base) -> {Sum,CarryOut} when
+        Xs::string(),
+        Ys::string(),
+        CarryIn::integer(),
+        Base::integer(),
+        Sum::string(),
+        CarryOut::integer().
+
+
 sum(Xs,Ys,_,_) when length(Xs)=/=length(Ys)->
     error;
 sum(Xs,Ys,CarryIn,Base)->
@@ -214,7 +232,7 @@ random_sleep()->
 %%  "00102"
 %%1>Ys= [$3,$2,$8].
 %%4>padNumber(Xs,3).
-%%  "328"
+%%  "328"'''
 %% </div>
 padNumber(Xs,Count)when length(Xs)==Count->
     Xs;
@@ -233,7 +251,7 @@ padNumber(Xs,Count)->
 %%1>Xs= [$1,$0,$2],
 %%  Ys = [$1,$1,$1,$1].
 %%2>padNumbers(Xs,Ys).
-%%  {"0102","1111"}
+%%  {"0102","1111"}'''
 %% </div>
 padNumbers(Xs, Ys) when length(Xs)>=length(Ys) ->
     K = length(Xs),
