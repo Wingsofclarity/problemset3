@@ -18,7 +18,7 @@
 %% "777"
 %% '''
 %% </div>
--spec start(A, B, Base) -> ok when
+-spec start(A, B, Base) -> string() when
       A::string(),
       B::string(),
       Base::integer().
@@ -28,7 +28,7 @@ start(A,B, Base) ->
 
 %% @doc Adds two numbers A and B, specified as strings, in the given Base,
 %% by spawning child processes to do the job. It accepts one option:
-%%   `{'N', N}', where N is the amount of child processes to spawn to go the job.
+%%   ``{'N', N}'', where N is the amount of child processes to spawn to go the job.
 %%
 %% === Example ===
 %% <div class="example">
@@ -37,7 +37,7 @@ start(A,B, Base) ->
 %% "99999999"
 %% '''
 %% </div>
--spec start(A, B, Base, Options) -> ok when
+-spec start(A, B, Base, Options) -> string() when
       A::string(),
       B::string(),
       Base::integer(),
