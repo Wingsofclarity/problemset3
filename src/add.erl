@@ -4,8 +4,8 @@
 
 %% @doc TODO: add documentation
 -spec start(A,B,Base) -> ok when
-      A::integer(),
-      B::integer(),
+      A::string(),
+      B::string(),
       Base::integer().
 
 start(A,B, Base) ->
@@ -13,17 +13,14 @@ start(A,B, Base) ->
 
 %% @doc TODO: add documentation
 -spec start(A, B, Base, Options) -> ok when
-      A::integer(),
-      B::integer(),
+      A::string(),
+      B::string(),
       Base::integer(),
       Option::atom() | tuple(),
       Options::[Option].
 
 start(A, B, Base, Options) ->
-    {APadded, BPadded} = utils:padNumbers(
-        integer_to_list(A),
-        integer_to_list(B)
-    ),
+    {APadded, BPadded} = utils:padNumbers(A, B),
 
     N = proplists:get_value('N', Options, 3),
     As = utils:split(APadded, N),
@@ -34,9 +31,7 @@ start(A, B, Base, Options) ->
     ),
     StartChild ! {carry, 0},
     {Result, CarryOut} = receive_results([]),
-    SumStr = lists:append([integer_to_list(CarryOut) | Result]),
-    {Sum, _} = string:to_integer(SumStr),
-    Sum.
+    lists:append([integer_to_list(CarryOut) | Result]).
 
 %% @doc TODO: add documentation
 -spec start_child(A,B,NextPid,ParentPid,Base) -> pid() when
