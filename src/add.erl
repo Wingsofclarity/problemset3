@@ -2,6 +2,8 @@
 -module(add).
 -export([start/3, start/4]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 %% @doc TODO: add documentation
 -spec start(A,B,Base) -> ok when
       A::integer(),
@@ -74,3 +76,18 @@ receive_results(Results) ->
             % io:format("Received final carry, we are DONE!! ~s~n", [CarryIn]),
             {Results, CarryIn}
     end.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                          %%
+%%         EUnit Test Cases                                 %%
+%%                                                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+start_test_()->
+    [?_assertEqual(3,start(1,2,10)),
+     ?_assertEqual(100,start(11,1,2)),
+     ?_assertEqual(100,start(87,13,10))].
+
+
+    
