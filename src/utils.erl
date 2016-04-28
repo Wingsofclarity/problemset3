@@ -5,7 +5,7 @@
 
 -module(utils).
 
--export([seqs/1, filter/2, split/2, padNumbers/2, sum/4]).
+-export([seqs/1, filter/2, split/2, padNumbers/2, sum/4, random_sleep/0]).
 
 %% To use EUnit we must include this.
 -include_lib("eunit/include/eunit.hrl").
@@ -214,7 +214,8 @@ sum_aux(X,Y,CarryIn,Base)when X+Y+CarryIn<Base ->
     {X+Y+CarryIn, 0}.
 
 random_sleep()->
-    A = random:uniform()*1000,
+%%    rand:seed(self()),
+    A = rand:uniform()*1000,
     io:format("I randomed ~w~n", [A]),
     timer:sleep(round(A)).
     
