@@ -18,7 +18,7 @@
 %% "777"
 %% '''
 %% </div>
--spec start(A, B, Base) -> ok when
+-spec start(A, B, Base) -> string() when
       A::string(),
       B::string(),
       Base::integer().
@@ -37,9 +37,9 @@ start(A,B, Base) ->
 %% "99999999"
 %% '''
 %% </div>
--spec start(A, B, Base, Options) -> ok when
-      A::integer(),
-      B::integer(),
+-spec start(A, B, Base, Options) -> string() when
+      A::string(),
+      B::string(),
       Base::integer(),
       Option::atom() | tuple(),
       Options::[Option].
