@@ -214,7 +214,7 @@ sum_aux(X,Y,CarryIn,Base)when X+Y+CarryIn<Base ->
     {X+Y+CarryIn, 0}.
 
 random_sleep()->
-%%    rand:seed(self()),
+    rand:seed(exs1024),
     A = rand:uniform()*1000,
     io:format("I randomed ~w~n", [A]),
     timer:sleep(round(A)).
