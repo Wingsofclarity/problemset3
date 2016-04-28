@@ -107,9 +107,9 @@ receive_results(Results) ->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 start_test_()->
-    [?_assertEqual(3,start(1,2,10)),
-     ?_assertEqual(100,start(11,1,2)),
-     ?_assertEqual(100,start(87,13,10))].
+    [?_assertEqual("3",start("1","2",10)),
+     ?_assertEqual("100",start("11","1",2)),
+     ?_assertEqual("100",start("87","13",10))].
 
 
     
