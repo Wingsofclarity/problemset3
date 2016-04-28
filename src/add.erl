@@ -4,8 +4,21 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
-%% @doc TODO: add documentation
--spec start(A,B,Base) -> ok when
+%% @doc Adds two numbers A and B, specified as strings, in the given Base,
+%% by spawning child processes to do the job. It spawns 3 child processes by default.
+%%
+%% === Example ===
+%% <div class="example">
+%% ```
+%% 1> A = "123".
+%% "123"
+%% 2> B = "654".
+%% "654"
+%% 3> add:start(A, B, 10).
+%% "777"
+%% '''
+%% </div>
+-spec start(A, B, Base) -> ok when
       A::string(),
       B::string(),
       Base::integer().
@@ -13,7 +26,17 @@
 start(A,B, Base) ->
     start(A, B, Base, []).
 
-%% @doc TODO: add documentation
+%% @doc Adds two numbers A and B, specified as strings, in the given Base,
+%% by spawning child processes to do the job. It accepts one option:
+%%   `{'N', N}', where N is the amount of child processes to spawn to go the job.
+%%
+%% === Example ===
+%% <div class="example">
+%% ```
+%% 1> add:start("12345678", "87654321", 10, [{'N', 5}]).
+%% "99999999"
+%% '''
+%% </div>
 -spec start(A, B, Base, Options) -> ok when
       A::string(),
       B::string(),
@@ -41,7 +64,6 @@ start(A, B, Base, Options) ->
             lists:append(Result)
     end.
 
-%% @doc TODO: add documentation
 -spec start_child(A,B,NextPid,ParentPid,Base) -> pid() when
       A :: [char()],
       B :: [char()],
