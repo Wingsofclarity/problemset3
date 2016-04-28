@@ -10,7 +10,7 @@
 %% To use EUnit we must include this.
 -include_lib("eunit/include/eunit.hrl").
 
--compile(export_all).
+%%-compile(export_all).
 
 
 %% @doc Generates a list of lists of increasing sequences of integers
@@ -253,6 +253,12 @@ padNumber(Xs,Count)->
 %%2>padNumbers(Xs,Ys).
 %%  {"0102","1111"}'''
 %% </div>
+-spec padNumbers(Xs,Ys)->Zs when
+    T::any(),
+    Xs::[T],
+    Ys::[T],
+    Zs::[T].
+
 padNumbers(Xs, Ys) when length(Xs)>=length(Ys) ->
     K = length(Xs),
     {padNumber(Xs,K),padNumber(Ys,K)};
