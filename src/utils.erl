@@ -215,7 +215,7 @@ sum_aux(X,Y,CarryIn,Base)when X+Y+CarryIn<Base ->
 
 random_sleep()->
     A = random:uniform()*1000,
-%%    io:format("I randomed ~w~n", [A]),
+    io:format("I randomed ~w~n", [A]),
     timer:sleep(round(A)).
     
 
